@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<!-- Load d3-annotation -->
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="index.css">
+<script type="text/javascript" src="index.js"></script>
+<!--<script>
+function filterFamily1() {
+  console.log("Inside filterFamily1");
+}
+</script>-->
+
+<html>
+<head>
+<title>SARS-CoV-2 Variant Analysis</title>
+<link rel = "icon" href = "student-13.svg" type = "image/x-icon">
+</head>
+<p><h2>Variants Are Expected</h2></p>
+<body onload="init()">
+	<table class="alldetail">
+	<tr>
+		<td colspan=2>
+		Viruses constantly change through mutation and sometimes these mutations result in a new variant of the virus. Some variants emerge and disappear while others persist. New variants will continue to emerge.<br><br>
+		The important things for scientists to identify about changing viruses, like the virus that causes COVID-19, is how the change impacts people, if the vaccines still work, if treatment options are effective and if tests can still identify the active virus.
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2> 
+			<span>
+				<div class="pp_div_container" display=inline>
+					<div class="ppdivtab">
+						Variants of SARS-CoV-2&nbsp;&nbsp;&nbsp;&nbsp;<button class="prev" id="prev" disabled>Previous</button>
+							<a href="" class="active" id="All" style="color:white; cursor: default"><b>All</b></a>
+							<a href="" class="litop" id="Other" style="color:yellow; cursor: default"><b>Other</b></a>
+							<a href="" class="litop" id="B16172" style="color:red; cursor: default"><b>B.1.617.2</b></a>
+							<a href="" class="litop" id="B11529" style="color:blue; cursor: default"><b>B.1.1.529</b></a>
+							<a href="" class="litop" id="BA11" style="color:purple; cursor: default"><b>BA.1.1</b></a>
+							<a href="" class="litop" id="BA2" style="color:orange; cursor: default"><b>BA.2</b></a>
+							<a href="" class="litop" id="BA2121" style="color:pink; cursor: default"><b>BA.2.12.1</b></a>
+							<a href="" class="litop" id="BA4" style="color:green; cursor: default"><b>BA.4</b></a>
+							<a href="" class="litop" id="BA5"style="color:brown; cursor: default"><b>BA.5</b></a>
+						<button class="next" id="next">Next</button>
+					</div>
+			</div>
+			</span>
+		</td>
+	</tr>
+	<!-- Additional Filters Start -->
+	<tr>
+		<td colspan=2>
+			Include/Exclude SARS-CoV-2 All Variant in Line Chart<select id="includeexclude">
+				<option value="inc">Include All Vaiant</option>
+				<option value="exc">Exclude  All Vaiant</option>
+			</select>
+	<!-- Additional Filters End -->
+	<!-- Viz & info Start-->
+	<tr>
+		<td><div id="variant_dataviz"></div></td>
+		<td rowspan=2>
+		<!-- Info Div Start -->
+			<!-- All Variant Start -->
+			<div id="topAll" class="variantdivtop" style="display: block">
+				<p style="color:white;"><b>All Variants</b></p>
+				<table class="variantdetail">
+					<tr>
+						<td>Coronavirus disease 2019 (COVID-19) is a contagious disease caused by a virus, the severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first known case was identified in Wuhan, China, in December 2019.The disease quickly spread worldwide, resulting in the COVID-19 pandemic.<br><br>
+						</td>
+					</tr>
+					<tr>
+						<td>COVID 19 transmits when people breathe in air contaminated by droplets and small airborne particles containing the virus. The risk of breathing these in is highest when people are in close proximity, but they can be inhaled over longer distances, particularly indoors. Transmission can also occur if splashed or sprayed with contaminated fluids in the eyes, nose or mouth, and, rarely, via contaminated surfaces. People remain contagious for up to 20 days, and can spread the virus even if they do not develop symptoms.<br><br>
+						</td>
+					</tr>
+					<tr>
+						<td colspan=13>
+							Major variants
+							<li>Wild type</li>
+							<li>Alpha (B.1.1.7)</li>
+							<li>Beta (B.1.351)</li>
+							<li>Gamma (P.1)</li>
+							<li>Delta (B.1.617.2)</li>
+							<li>Omicron (B.1.1.529)</li>
+							<li>BA.1</li>
+							<li>BA.2</li>
+							<li>BA.3</li>
+							<li>BA.4</li>
+							<li>BA.5</li>
+							<br><br><br><br><br>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<!-- All Variant Start -->
+			<!-- Other Variant Start -->
+			<div id="topOther" class="variantdivtop" style="display: none;">
+				<p style="color:yellow;"><b>Other WHO: Other</b><br><br></p>
+				<table class="variantdetail">
+					<tr>
+						<td colspan=3>Identification</td>
+						<td colspan=4>Emergence</td>
+						<td colspan=4>Changes relative to previously circulating variants at the time and place of emergence</td>
+						<td colspan=2>Neutralising antibody activity (or efficacy when available)<br><br><br></td>
+					</tr>
+					<tr>
+						<td>WHO label</td>
+						<td>PANGO lineage</td>
+						<td>First outbreak</td>
+						<td>Earliest sample</td>
+						<td>Designated VOC</td>
+						<td>Current circulation</td>
+						<td>Notable mutations</td>
+						<td>Transmissibility</td>
+						<td>Hospitalisation</td>
+						<td>Mortality</td>
+						<td>From natural infection</td>
+						<td>From vaccination<br><br><br><br></td>
+					</tr>
+					<tr>
+						<td>Alpha</td>
+						<td>B.1.1.7</td>
+						<td>United Kingdom</td>
+						<td>20 Sep 2020</td>
+						<td>18 Dec 2020</td>
+						<td>No</td>
+						<td>69–70del, N501Y, P681H</td>
+						<td>+29% (24–33%)</td>
+						<td>+52% (47–57%)</td>
+						<td>+59% (44–74%)</td>
+						<td>Minimal reduction</td>
+						<td>Minimal reduction<br></td>
+					</tr>
+					<tr>
+						<td>Gamma</td>
+						<td>P.1 (B.1.1.28.1)</td>
+						<td>Brazil</td>
+						<td>Nov 2020</td>
+						<td>15 Jan 2021</td>
+						<td>No</td>
+						<td>K417T, E484K, N501Y</td>
+						<td>+38% (29–48%)</td>
+						<td>Possibly increased</td>
+						<td>+50% (50% CrI, 20–90%)</td>
+						<td>Reduced</td>
+						<td>Retained by many<br></td>
+					</tr>
+					<tr>
+						<td>Beta</td>
+						<td>B.1.351</td>
+						<td>South Africa</td>
+						<td>May 2020</td>
+						<td>14 Jan 2021</td>
+						<td>No</td>
+						<td>K417N, E484K, N501Y</td>
+						<td>+25% (20–30%)</td>
+						<td>Under investigation</td>
+						<td>Possibly increased</td>
+						<td>Reduced, T cell response elicited by D614G virus remains effective</td>
+						<td>Efficacy reduction against symptomatic disease,retained against severe disease<br></td>
+					</tr>
+				</table>
+			</div>
+			<!-- Other Variant End -->
+			<!-- B16172 Variant Start -->
+			<div id="topB16172" class="variantdivtop" style="display: none;">
+			  <p style="color:red;"><b>B.1.617.2 WHO: Delta</b></p>
+			  <table class="variantdetail">
+				<tr>
+					<td colspan=3>Identification</td>
+					<td colspan=4>Emergence</td>
+					<td colspan=4>Changes relative to previously circulating variants at the time and place of emergence</td>
+					<td colspan=2>Neutralising antibody activity (or efficacy when available)</td>
+				</tr>
+				<tr>
+					<td>WHO label</td>
+					<td>PANGO lineage</td>
+					<td>First outbreak</td>
+					<td>Earliest sample</td>
+					<td>Designated VOC</td>
+					<td>Current circulation</td>
+					<td>Notable mutations</td>
+					<td>Transmissibility</td>
+					<td>Hospitalisation</td>
+					<td>Mortality</td>
+					<td>From natural infection</td>
+					<td>From vaccination</td>
+				</tr>
+				<tr>
+					<td>Delta</td>
+					<td>B.1.617.2</td>
+					<td>India</td>
+					<td>Oct-20</td>
+					<td>6-May-21</td>
+					<td>No</td>
+					<td>L452R, T478K, P681R</td>
+					<td>+97% (76–117%)</td>
+					<td>+85% (39–147%) relative to Alpha</td>
+					<td>+137% (50–230%)</td>
+					<td>Reinfections happened</td>
+					<td>Efficacy reduction for non-severe disease</td>
+				</tr>
+				<tr>
+					<td colspan=13>
+					<p>The Delta variant (B.1.617.2) is a variant of SARS-CoV-2, the virus that causes COVID-19. It was first detected in India in late 2020. The Delta variant was named on 31 May 2021 and had spread to over 179 countries by 22 November 2021. The World Health Organization (WHO) indicated in June 2021 that the Delta variant was becoming the dominant strain globally.<br><br>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=13>
+					Mutations
+					<img src="SARS-CoV-2_Delta_variant.svg.png" alt="Amino acid mutations of SARS-CoV-2 Delta variant plotted on a genome map of SARS-CoV-2 with a focus on Spike." width="737" height="150"/><br><br>
+					</td>
+				</tr>
+			  </table>
+			</div>
+			<!-- B16172 Variant End -->
+			<!-- B11529 Variant Start -->
+			<div id="topB11529" class="variantdivtop" style="display: none;">
+			  <p style="color:blue;"><b>B.1.1.529 WHO: Omicron</b></p>
+			  <table class="variantdetail">
+				<tr>
+					<td colspan=3>Identification</td>
+					<td colspan=4>Emergence</td>
+					<td colspan=4>Changes relative to previously circulating variants at the time and place of emergence</td>
+					<td colspan=2>Neutralising antibody activity (or efficacy when available)</td>
+				</tr>
+				<tr>
+					<td>WHO label</td>
+					<td>PANGO lineage</td>
+					<td>First outbreak</td>
+					<td>Earliest sample</td>
+					<td>Designated VOC</td>
+					<td>Current circulation</td>
+					<td>Notable mutations</td>
+					<td>Transmissibility</td>
+					<td>Hospitalisation</td>
+					<td>Mortality</td>
+					<td>From natural infection</td>
+					<td>From vaccination</td>
+				</tr>
+				<tr>
+					<td>Omicron</td>
+					<td>B.1.1.529</td>
+					<td>South Africa</td>
+					<td>9 Nov 2021</td>
+					<td>26 Nov 2021</td>
+					<td>Yes</td>
+					<td>P681H, N440K, N501Y, S477N, many others</td>
+					<td>Possibly increased</td>
+					<td>−57% (59–61%) relative to Delta</td>
+					<td>−63% (69–74%) relative to Delta</td>
+					<td>Increased reinfection rate</td>
+					<td>Efficacy reduction against symptomatic disease</td>
+				</tr>
+				<tr>
+					<td colspan=13>
+					Omicron (B.1.1.529) is a variant of SARS-CoV-2 first reported to the World Health Organization (WHO) by the Network for Genomics Surveillance in South Africa on 24 November 2021.It was first detected in Botswana and has spread to become the predominant variant in circulation around the world.Following the original BA.1 variant, several subvariants of Omicron have emerged: BA.2, BA.3, BA.4, and BA.5.<br>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=13>
+					Mutations
+					<img src="SARS-CoV-2_Omicron_(BA.1)_variant.svg.png" alt="The genomic sequence of the Omicron variant." width="737" height="150"></td>
+				</tr>
+			  </table>
+			</div>
+			<!-- B11529 Variant End -->
+			<!-- BA11 Variant Start -->
+			<div id="topBA11" class="variantdivtop" style="display: none;">
+			  <p style="color:purple;"><b>BA.1.1 WHO: Omicron</b></p>
+			  <table class="variantdetail">
+				<tr>
+					<td colspan=3>Identification</td>
+					<td colspan=4>Emergence</td>
+					<td colspan=4>Changes relative to previously circulating variants at the time and place of emergence</td>
+					<td colspan=2>Neutralising antibody activity (or efficacy when available)<br><br><br><br></td>
+				</tr>
+				<tr>
+					<td>WHO label</td>
+					<td>PANGO lineage</td>
+					<td>First outbreak</td>
+					<td>Earliest sample</td>
+					<td>Designated VOC</td>
+					<td>Current circulation</td>
+					<td>Notable mutations</td>
+					<td>Transmissibility</td>
+					<td>Hospitalisation</td>
+					<td>Mortality</td>
+					<td>From natural infection</td>
+					<td>From vaccination<br><br><br></td>
+				</tr>
+				<tr>
+					<td>Omicron</td>
+					<td>B.1.1.529</td>
+					<td>South Africa</td>
+					<td>9 Nov 2021</td>
+					<td>26 Nov 2021</td>
+					<td>Yes</td>
+					<td>P681H, N440K, N501Y, S477N, many others</td>
+					<td>Possibly increased</td>
+					<td>−57% (59–61%) relative to Delta</td>
+					<td>−63% (69–74%) relative to Delta</td>
+					<td>Increased reinfection rate</td>
+					<td>Efficacy reduction against symptomatic disease<br><br></td>
+				</tr>
+				<tr>
+					<td colspan=13>
+						BA.1 is the original strain of the Omicron variant.<br><br>
+						Omicron BA.1 multiplies around 70 times faster than the Delta variant in the bronchi (lung airways) but evidence suggests it is less severe than previous variants, especially compared to Delta.BA.1 might be less able to penetrate deep lung tissue.Omicron infections are 91 percent less fatal than the delta variant, with 51 percent less risk of hospitalization.However, the estimated difference in the intrinsic risk of hospitalization largely decreases to 0–30 percent when reinfections are excluded.<br><br>
+						BA.1 has itself been divided in two, the original BA.1 and BA.1.1 where the main difference is that the latter has a R346K mutation.<br><br>
+					</td>
+				</tr>
+				</tr>
+			  </table>
+			</div>
+			<!-- BA11 Variant End -->
+			<!-- BA2 Variant Start -->
+			<div id="topBA2" class="variantdivtop" style="display: none;">
+			  <p style="color:orange;"><b>BA.2 WHO: Omicron</b></p>
+			  <table class="variantdetail">
+				<tr>
+					<td colspan=3>Identification</td>
+					<td colspan=4>Emergence</td>
+					<td colspan=4>Changes relative to previously circulating variants at the time and place of emergence</td>
+					<td colspan=2>Neutralising antibody activity (or efficacy when available)<br><br></td>
+				</tr>
+				<tr>
+					<td>WHO label</td>
+					<td>PANGO lineage</td>
+					<td>First outbreak</td>
+					<td>Earliest sample</td>
+					<td>Designated VOC</td>
+					<td>Current circulation</td>
+					<td>Notable mutations</td>
+					<td>Transmissibility</td>
+					<td>Hospitalisation</td>
+					<td>Mortality</td>
+					<td>From natural infection<br><br></td>
+					<td>From vaccination<br><br></td>
+				</tr>
+				<tr>
+					<td>Omicron</td>
+					<td>B.1.1.529</td>
+					<td>South Africa</td>
+					<td>9 Nov 2021</td>
+					<td>26 Nov 2021</td>
+					<td>Yes</td>
+					<td>P681H, N440K, N501Y, S477N, many others</td>
+					<td>Possibly increased</td>
+					<td>−57% (59–61%) relative to Delta</td>
+					<td>−63% (69–74%) relative to Delta</td>
+					<td>Increased reinfection rate</td>
+					<td>Efficacy reduction against symptomatic disease<br><br></td>
+				</tr>
+				<tr>
+					<td colspan=13>
+					<br>On 29 March 2022, Omicron subvariant BA.2 became the dominant strain in the U.S.<br><br>
+					A laboratory study on hamsters and mice in Japan published as a non-peer-reviewed preprint in mid-February 2022 suggested that BA.2, is not only more transmissible than BA.1, but may cause more severe disease.[138] Therapeutic monoclonal antibodies used to treat people infected with COVID did not have much effect on BA.2, which was "almost completely resistant" to casirivimab and imdevimab, and 35 times more resistant to sotrovimab than the original BA.1 subvariant.<br><br>
+					According to early research, BA.2 is roughly 30% to 60% more transmissible than BA.1.<br><br>
+					</td>
+				</tr>
+			  </table>
+			</div>
+			<!-- BA2 Variant End -->
+			<!-- BA2121 Variant Start -->
+			<div id="topBA2121" class="variantdivtop" style="display: none;">
+			  <p style="color:pink;"><b>BA.2.12.1 WHO: Omicron</b></p>
+			  <table class="variantdetail">
+				<tr>
+					<td colspan=3>Identification</td>
+					<td colspan=4>Emergence</td>
+					<td colspan=4>Changes relative to previously circulating variants at the time and place of emergence</td>
+					<td colspan=2>Neutralising antibody activity (or efficacy when available)<br><br><br><br></td>
+				</tr>
+				<tr>
+					<td>WHO label</td>
+					<td>PANGO lineage</td>
+					<td>First outbreak</td>
+					<td>Earliest sample</td>
+					<td>Designated VOC</td>
+					<td>Current circulation</td>
+					<td>Notable mutations</td>
+					<td>Transmissibility</td>
+					<td>Hospitalisation</td>
+					<td>Mortality</td>
+					<td>From natural infection</td>
+					<td>From vaccination<br><br><br><br></td>
+				</tr>
+				<tr>
+					<td>Omicron</td>
+					<td>B.1.1.529</td>
+					<td>South Africa</td>
+					<td>9 Nov 2021</td>
+					<td>26 Nov 2021</td>
+					<td>Yes</td>
+					<td>P681H, N440K, N501Y, S477N, many others</td>
+					<td>Possibly increased</td>
+					<td>−57% (59–61%) relative to Delta</td>
+					<td>−63% (69–74%) relative to Delta</td>
+					<td>Increased reinfection rate</td>
+					<td>Efficacy reduction against symptomatic disease<br><br><br><br></td>
+				</tr>
+				<tr>
+					<td colspan=13>
+					<br><br>There were two new BA.2 subvariants detected in the US state of New York, which are BA.2.12 and BA.2.12.1, both of which have a significant growth advantage of 23-27% over BA.2 and contributing to a rise in infections in central New York, centred on Syracuse and Lake Ontario, which later became dominant by May 24 in the US.<br><br><br>
+					</td>
+				</tr>
+			  </table>
+			</div>
+			<!-- BA2121 Variant End -->
+			<!-- BA4 Variant Start -->
+			<div id="topBA4" class="variantdivtop" style="display: none;">
+			  <p style="color:green;"><b>BA.4 WHO: Omicron</b></p>
+			  <table class="variantdetail">
+				<tr>
+					<td colspan=3>Identification</td>
+					<td colspan=4>Emergence</td>
+					<td colspan=4>Changes relative to previously circulating variants at the time and place of emergence</td>
+					<td colspan=2>Neutralising antibody activity (or efficacy when available)<br><br></td>
+				</tr>
+				<tr>
+					<td>WHO label</td>
+					<td>PANGO lineage</td>
+					<td>First outbreak</td>
+					<td>Earliest sample</td>
+					<td>Designated VOC</td>
+					<td>Current circulation</td>
+					<td>Notable mutations</td>
+					<td>Transmissibility</td>
+					<td>Hospitalisation</td>
+					<td>Mortality</td>
+					<td>From natural infection</td>
+					<td>From vaccination<br><br></td>
+				</tr>
+				<tr>
+					<td>Omicron</td>
+					<td>B.1.1.529</td>
+					<td>South Africa</td>
+					<td>9 Nov 2021</td>
+					<td>26 Nov 2021</td>
+					<td>Yes</td>
+					<td>P681H, N440K, N501Y, S477N, many others</td>
+					<td>Possibly increased</td>
+					<td>−57% (59–61%) relative to Delta</td>
+					<td>−63% (69–74%) relative to Delta</td>
+					<td>Increased reinfection rate</td>
+					<td>Efficacy reduction against symptomatic disease</td>
+				</tr>
+				<tr>
+					<td colspan=13>
+					In April 2022, the WHO announced it was tracking the BA.4 and BA.5 subvariants with BA.4 having been detected in South Africa, Botswana, Denmark, Scotland and England.Early indications from data collected in South Africa suggested BA.4 and BA.5 have a significant growth advantage over BA.2, which, by May 12, earned the status Variant of Concern by the European Centre for Disease Prevention and Control, and, by May 20, by the UK Health Security Agency.BA.5 was dominant in Portugal by May 25, accounting for two-thirds of all new cases there.By June 24, BA.4 and BA.5 together had become dominant variants in the UK and Germany.These two subvariants became dominant in the United States by June 28.<br><br>
+					In May 2022, a preprint indicated Omicron subvariants BA.4 and BA.5 could cause a large share of COVID-19-reinfections, beyond the increase of reinfections caused by the Omicron lineage, even for people who were infected by Omicron BA.1 due to increases in immune evasion, especially for the unvaccinated. However, the observed escape of BA.4 and BA.5 from immunity by a BA.1 infection is more moderate than of BA.1 against studied prior cases of immunity (such as immunity from specific vaccines).
+					</td>
+				</tr>
+			  </table>
+			</div>
+			<!-- BA4 Variant End -->
+			<!-- BA5 Variant Start -->
+			<div id="topBA5" class="variantdivtop" style="display: none;">
+			  <p style="color:brown;"><b>BA.5 WHO: Omicron</b></p>
+			  <table class="variantdetail">
+				<tr>
+					<td colspan=3>Identification</td>
+					<td colspan=4>Emergence</td>
+					<td colspan=4>Changes relative to previously circulating variants at the time and place of emergence</td>
+					<td colspan=2>Neutralising antibody activity (or efficacy when available)</td>
+				</tr>
+				<tr>
+					<td>WHO label</td>
+					<td>PANGO lineage</td>
+					<td>First outbreak</td>
+					<td>Earliest sample</td>
+					<td>Designated VOC</td>
+					<td>Current circulation</td>
+					<td>Notable mutations</td>
+					<td>Transmissibility</td>
+					<td>Hospitalisation</td>
+					<td>Mortality</td>
+					<td>From natural infection</td>
+					<td>From vaccination</td>
+				</tr>
+				<tr>
+					<td>Omicron</td>
+					<td>B.1.1.529</td>
+					<td>South Africa</td>
+					<td>9 Nov 2021</td>
+					<td>26 Nov 2021</td>
+					<td>Yes</td>
+					<td>P681H, N440K, N501Y, S477N, many others</td>
+					<td>Possibly increased</td>
+					<td>−57% (59–61%) relative to Delta</td>
+					<td>−63% (69–74%) relative to Delta</td>
+					<td>Increased reinfection rate</td>
+					<td>Efficacy reduction against symptomatic disease</td>
+				</tr>
+				<tr>
+					<td colspan=13>
+					In April 2022, the WHO announced it was tracking the BA.4 and BA.5 subvariants with BA.4 having been detected in South Africa, Botswana, Denmark, Scotland and England.Early indications from data collected in South Africa suggested BA.4 and BA.5 have a significant growth advantage over BA.2, which, by May 12, earned the status Variant of Concern by the European Centre for Disease Prevention and Control, and, by May 20, by the UK Health Security Agency.BA.5 was dominant in Portugal by May 25, accounting for two-thirds of all new cases there.By June 24, BA.4 and BA.5 together had become dominant variants in the UK and Germany.These two subvariants became dominant in the United States by June 28.<br><br>
+					In May 2022, a preprint indicated Omicron subvariants BA.4 and BA.5 could cause a large share of COVID-19-reinfections, beyond the increase of reinfections caused by the Omicron lineage, even for people who were infected by Omicron BA.1 due to increases in immune evasion, especially for the unvaccinated. However, the observed escape of BA.4 and BA.5 from immunity by a BA.1 infection is more moderate than of BA.1 against studied prior cases of immunity (such as immunity from specific vaccines).
+					</td>
+				</tr>
+			  </table>
+			</div>
+			<!-- BA5 Variant End -->
+		</td>
+		<!-- Info Div End -->
+	</tr>
+	<!-- Viz & info End-->
+	<tr>
+		<td>
+			<div id="cases_dataviz"></div>
+		</td>
+	</tr>
+	<tr class="footer">
+		<td colspan=2>
+			<h3>About</h3>
+			
+			<h4>The Project</h4>
+			<h5>This Interactive Visualization is a project submitted as a part of final project for the:<br><br>
+			Course#: CS 416<br>
+			Course Name: Data Visualization<br>
+			University: University of Illinois at Urbana Champaign<br>
+			Department: Computer Science<br>
+			Semester: Summer 2022<br>
+			Degree: Master of Computer Science, Data Science<br><br><br></h5>
+			
+			<h4>The Author</h4>
+			<h5>Ravi Shankar Shukla<br>
+			Know more about the author:<br>
+			<a href="https://www.linkedin.com/in/ravi-shankar-shukla//" target="_blank"/>LinkedIn</a><br>
+			<a href="https://github.com/ravi-shankar-shukla" target="_blank">GitHub</a><br>
+			<a href="https://public.tableau.com/app/profile/ravi.shankar.shukla/" target="_blank">Tableau Public</a><br>
+			
+			<br><br>The References:<br>
+			<a href="https://www.cdc.gov/coronavirus/2019-ncov/variants/index.html" target="_blank"/>CDC - Variants of the Virus</a><br>
+			<a href="https://en.wikipedia.org/wiki/Variants_of_SARS-CoV-2" target="_blank"/>Wikipedia - Variants of SARS-CoV-2</a><br>
+			
+			<br><br>Data Source:<br>
+			<a href="https://data.cdc.gov/Laboratory-Surveillance/SARS-CoV-2-Variant-Proportions/jr58-6ysp/data" target="_blank"/>SARS-CoV-2 Variant</a><br>
+			<a href="https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36/data" target="_blank"/>SARS-CoV-2 Cases/Deaths</a><br>
+		</h5>
+		</td>
+	</tr>
+	</table>
+</body>
+</html>
